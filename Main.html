@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wedding Invitation</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    html {scroll-behavior:smooth;}
+    body {margin:0; font-family:'Poppins', sans-serif; color:#f38080; background-color:#fff;}
+
+    .hero {height:100vh; max-width:none; padding:0; margin:0; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; color:#fff; position:relative; overflow:hidden;}
+    .hero-slides {position:absolute; inset:0; z-index:0; overflow:hidden; background:linear-gradient(135deg,#f8e9d6,#f38080);}
+    .hero-slide {position:absolute; inset:0; background-position:center center; background-size:cover; background-repeat:no-repeat; opacity:0; transform:scale(1); transition:opacity 1.5s ease-in-out, transform 0s linear 1.5s;}
+    .hero-slide.active {opacity:1; transform:scale(1.12); transition:opacity 1.5s ease-in-out, transform 7s linear;}
+    .hero::after {content:""; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:1;}
+    .hero-content {position:relative; z-index:2; padding:0 16px;}
+    .hero h2 {font-family:'Great Vibes', cursive; font-size:75px; margin:0; color:#f8e9d6; text-shadow:2px 2px 4px rgba(0,0,0,0.5);}
+    .hero .names {font-family:'Great Vibes', cursive; font-size:48px; margin:6px 0 0; color:#fff; text-shadow:2px 2px 4px rgba(0,0,0,0.5);}
+    .hero h1 {font-family:'Playfair Display', serif; font-size:52px; margin:10px 0; font-weight:700; text-shadow:2px 2px 4px rgba(0,0,0,0.5); color:#fff;}
+    .hero p {margin:8px 0; font-size:20px; text-shadow:1px 1px 2px rgba(0,0,0,0.5); letter-spacing:2px;}
+    .hero .dates {font-size:16px; letter-spacing:1px; line-height:1.8; margin-top:18px;}
+
+    section {padding:80px 20px; max-width:1000px; margin:auto;}
+    h3 {font-family:'Great Vibes', cursive; font-size:50px; color:#c49a6c; text-align:center; margin:0 0 40px;}
+    .story {line-height:1.8; font-size:18px; text-align:center; color:#555; max-width:720px; margin:auto;}
+
+    .reveal {opacity:0; transform:translateY(24px); transition:opacity .9s ease, transform .9s ease;}
+    .reveal.show {opacity:1; transform:none;}
+    .reveal[data-fx="left"] {transform:translateX(-70px);}
+    .reveal[data-fx="right"] {transform:translateX(70px);}
+    .reveal[data-fx="zoom"] {transform:scale(.88);}
+    .reveal[data-fx].show {transform:none;}
+
+    .st {opacity:0; transform:translateY(34px); transition:opacity .8s ease calc(var(--i,0) * .15s), transform .8s ease calc(var(--i,0) * .15s);}
+    .reveal.show .st {opacity:1; transform:none;}
+    .st:nth-child(2) {--i:1;} .st:nth-child(3) {--i:2;} .st:nth-child(4) {--i:3;}
+    .st:nth-child(5) {--i:4;} .st:nth-child(6) {--i:5;} .st:nth-child(7) {--i:6;} .st:nth-child(8) {--i:7;}
+
+    h3::after {content:""; display:block; width:0; height:2px; background:#c49a6c; margin:14px auto 0; transition:width 1s ease .3s;}
+    .reveal.show h3::after {width:80px;}
+
+    #progress {position:fixed; top:0; left:0; height:3px; width:0; background:#f38080; z-index:2000;}
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal,.st {opacity:1 !important; transform:none !important; transition:none !important;}
+      h3::after {width:80px; transition:none;}
+    }
+
+    .countdown {display:flex; justify-content:center; gap:14px; flex-wrap:wrap;}
+    .cd-box {background:#fff5f5; border:1px dashed #f38080; border-radius:14px; padding:16px 10px; min-width:84px; text-align:center;}
+    .cd-num {font-family:'Playfair Display', serif; font-size:38px; color:#c49a6c; line-height:1.1;}
+    .cd-lbl {font-size:12px; letter-spacing:1px; text-transform:uppercase; color:#999; margin-top:4px;}
+    .cd-note {text-align:center; color:#888; font-size:15px; margin-top:20px;}
+
+    .events {display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px;}
+    .event {background:#fff; border-radius:16px; padding:34px 24px; text-align:center; box-shadow:0 4px 18px rgba(0,0,0,0.08);}
+    .event.bride {border-top:5px solid #f38080;}
+    .event.groom {border-top:5px solid #5b8fd6;}
+    .event .tag {font-size:13px; letter-spacing:2px; text-transform:uppercase; color:#999;}
+    .event h4 {font-family:'Playfair Display', serif; font-size:28px; margin:8px 0 4px; color:#c49a6c;}
+    .event .place {color:#888; font-size:15px; margin:0 0 18px;}
+    .event .date {font-family:'Playfair Display', serif; font-size:34px; color:#f38080; margin:6px 0 0;}
+    .event.groom .date {color:#5b8fd6;}
+    .event .lunar {color:#777; font-size:15px; margin:4px 0 16px;}
+    .event p {margin:6px 0; color:#555; font-size:16px;}
+
+    .journey svg {width:100%; max-width:520px; display:block; margin:0 auto;}
+    .journey .land,.journey .isl,.journey .pin,.journey .lbl,.journey .route,.journey .heart,.journey .flag {transform-box:fill-box; transform-origin:center;}
+    .journey .flag {transform-origin:left center;}
+    @media (prefers-reduced-motion: no-preference) {
+      .journey.play .land,.journey.play .isl {animation:pop 1.4s ease-out both;}
+      .journey.play .route {animation:fade 1s ease-out 1.4s both;}
+      .journey.play .pin {animation:drop .7s cubic-bezier(.3,1.4,.5,1) 1.6s both;}
+      .journey.play .lbl {animation:fade .8s ease-out 2.1s both;}
+      .journey.play .heart {animation:fade .6s ease-out 1.8s both, beat 1.4s ease-in-out 2.4s infinite;}
+      .journey.play .flag {animation:wave 1.6s ease-in-out infinite;}
+    }
+    @keyframes pop {from{opacity:0; transform:scale(.8)} to{opacity:1; transform:scale(1)}}
+    @keyframes fade {from{opacity:0} to{opacity:1}}
+    @keyframes drop {from{opacity:0; transform:translateY(-30px)} to{opacity:1; transform:translateY(0)}}
+    @keyframes beat {0%,100%{transform:scale(1)} 50%{transform:scale(1.25)}}
+    @keyframes wave {0%,100%{transform:skewY(0deg)} 50%{transform:skewY(7deg)}}
+
+    .album {display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:16px;}
+    .album img {width:100%; height:350px; object-fit:cover; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.15);}
+
+    .tiktok-container {max-width:325px; margin:0 auto; border-radius:12px; overflow:hidden; box-sizing:border-box;}
+
+
+
+    .maps {display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px;}
+    .map-cap {text-align:center; font-weight:500; color:#c49a6c; margin:0 0 10px;}
+    .map {width:100%; height:320px; border:none; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.15);}
+    footer {background:#333; color:#fff; text-align:center; padding:20px; font-size:14px;}
+
+    .music-btn {position:fixed; bottom:30px; right:30px; z-index:9999; width:50px; height:50px; background:#f38080; color:white; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:24px; cursor:pointer; box-shadow:0 4px 15px rgba(243,128,128,0.4); user-select:none;}
+    .music-btn.playing {animation:spin 4s linear infinite;}
+    @keyframes spin {100% {transform:rotate(360deg);}}
+
+    @media (max-width:800px) {
+          .hero h2 {font-size:52px;}
+      .hero .names {font-size:36px;}
+      .hero h1 {font-size:34px;}
+      h3 {font-size:42px;}
+      .cd-box {min-width:68px;}
+      .cd-num {font-size:30px;}
+    }
+  </style>
+</head>
+<body>
+
+  <div id="progress"></div>
+
+  <audio id="background-music" src="12.mp3" loop></audio>
+  <div id="music-control" class="music-btn">🎵</div>
+
+
+  <section id="hero" class="hero">
+    <div class="hero-slides" id="hero-slides"></div>
+    <div class="hero-content">
+      <h2>Wedding</h2>
+      <!-- ĐIỀN TÊN CÔ DÂU & CHÚ RỂ Ở DÒNG DƯỚI -->
+      <div class="names">Tên Cô Dâu &amp; Tên Chú Rể</div>
+      <h1>Save the Date</h1>
+      <p>Trân trọng kính mời</p>
+      <div class="dates">
+        Nhà gái · 17.03.2027 (10/2 Âm lịch)<br>
+        Nhà trai · 26.03.2027 (19/2 Âm lịch)
+      </div>
+    </div>
+  </section>
+
+  <section id="countdown" class="reveal" data-fx="zoom">
+    <h3>Đếm ngược đến ngày vui</h3>
+    <div class="countdown" id="countdown-box">
+      <div class="cd-box st"><div class="cd-num" id="cd-d">--</div><div class="cd-lbl">Ngày</div></div>
+      <div class="cd-box st"><div class="cd-num" id="cd-h">--</div><div class="cd-lbl">Giờ</div></div>
+      <div class="cd-box st"><div class="cd-num" id="cd-m">--</div><div class="cd-lbl">Phút</div></div>
+      <div class="cd-box st"><div class="cd-num" id="cd-s">--</div><div class="cd-lbl">Giây</div></div>
+    </div>
+    <div class="cd-note">Đến lễ cưới bên nhà gái · Thứ Tư, 17.03.2027</div>
+  </section>
+
+  <section id="story" class="reveal">
+    <h3>Câu chuyện tình yêu</h3>
+    <div class="story">
+      <p class="st">Một người lớn lên giữa đồng bằng sông Hồng, nơi có những cánh đồng lúa trải dài và tiếng gọi nhau ngày mùa của Nam Định. Một người sinh ra trên cao nguyên Bảo Lộc, nơi sương sớm phủ lên những đồi trà xanh ngát. Hai miền quê cách nhau cả một chiều dài đất nước, tưởng chừng chẳng có gì giao nhau.</p>
+      <p class="st">Vậy mà tơ duyên đã se đường. Họ gặp nhau bằng một câu chào bâng quơ, rồi thành những cuộc trò chuyện kéo dài đến khuya, thành những ngày không nhắn tin thì thấy thiếu thiếu.</p>
+      <p class="st">Có những ngày xa nhau, một đầu Bắc, một đầu Nam, nhưng khoảng cách chưa bao giờ làm tình yêu nhạt đi. Mỗi chuyến đi thăm nhau là một lần thêm chắc rằng người ấy chính là nhà.</p>
+      <p class="st">Và hôm nay, từ Nam Định đến Bảo Lộc, hai gia đình sắp trở thành một. Chúng mình rất vui nếu được các bạn đến chung vui trong ngày trọng đại này.</p>
+    </div>
+  </section>
+
+  <section id="journey" class="journey reveal" data-fx="zoom">
+    <h3>Từ Nam Định đến Bảo Lộc</h3>
+    <svg viewBox="0 0 680 710" role="img" aria-label="Bản đồ chữ S: nhà gái ở Nam Định, nhà trai ở Bảo Lộc">
+      <rect x="0" y="0" width="680" height="710" rx="16" fill="#CDE8F6"/>
+      <ellipse cx="560" cy="62" rx="40" ry="14" fill="#FFFFFF"/><ellipse cx="590" cy="52" rx="24" ry="13" fill="#FFFFFF"/><ellipse cx="536" cy="54" rx="22" ry="11" fill="#FFFFFF"/>
+      <ellipse cx="610" cy="250" rx="34" ry="12" fill="#FFFFFF"/><ellipse cx="634" cy="242" rx="20" ry="11" fill="#FFFFFF"/>
+      <path d="M480 220 q10 -8 20 0 t20 0 t20 0" fill="none" stroke="#8FC3E3" stroke-width="3" stroke-linecap="round"/>
+      <path d="M520 400 q10 -8 20 0 t20 0 t20 0" fill="none" stroke="#8FC3E3" stroke-width="3" stroke-linecap="round"/>
+      <path d="M350 390 q10 -8 20 0 t20 0 t20 0" fill="none" stroke="#8FC3E3" stroke-width="3" stroke-linecap="round"/>
+      <path d="M560 480 q10 -8 20 0 t20 0 t20 0" fill="none" stroke="#8FC3E3" stroke-width="3" stroke-linecap="round"/>
+      <path d="M330 600 q10 -8 20 0 t20 0 t20 0" fill="none" stroke="#8FC3E3" stroke-width="3" stroke-linecap="round"/>
+      <text x="560" y="430" text-anchor="middle" style="font-size:13px;font-style:italic;fill:#4F86AA">Biển Đông</text>
+      <g class="land">
+        <path d="M43.8 78.0 C45.1 71.3 53.3 65.3 59.0 64.7 C64.7 64.1 69.1 71.7 78.0 74.2 C86.9 76.7 103.3 83.1 112.2 79.9 C121.1 76.7 122.3 61.5 131.2 55.2 C140.1 48.9 155.3 41.6 165.4 41.9 C175.5 42.2 183.1 53.9 192.0 57.1 C200.9 60.3 210.4 54.9 218.6 60.9 C226.8 66.9 233.2 84.6 241.4 93.2 C249.6 101.7 269.3 105.5 268.0 112.2 C266.7 118.8 241.4 128.0 233.8 133.1 C226.2 138.2 227.5 137.8 222.4 142.6 C217.3 147.3 209.1 155.9 203.4 161.6 C197.7 167.3 191.4 171.7 188.2 176.8 C185.0 181.9 185.7 185.7 184.4 192.0 C183.1 198.3 178.7 207.8 180.6 214.8 C182.5 221.8 190.7 228.1 195.8 233.8 C200.9 239.5 205.3 241.4 211.0 249.0 C216.7 256.6 223.0 269.9 230.0 279.4 C237.0 288.9 245.2 299.7 252.8 306.0 C260.4 312.3 268.6 311.7 275.6 317.4 C282.6 323.1 289.5 332.0 294.6 340.2 C299.7 348.4 302.5 356.7 306.0 366.8 C309.5 376.9 313.6 389.6 315.5 401.0 C317.4 412.4 317.7 424.4 317.4 435.2 C317.1 446.0 315.5 456.7 313.6 465.6 C311.7 474.5 310.4 480.8 306.0 488.4 C301.6 496.0 295.9 504.2 287.0 511.2 C278.1 518.2 262.3 526.1 252.8 530.2 C243.3 534.3 235.7 533.4 230.0 535.9 C224.3 538.4 221.8 541.9 218.6 545.4 C215.4 548.9 215.4 553.0 211.0 556.8 C206.6 560.6 198.3 564.4 192.0 568.2 C185.7 572.0 179.3 574.5 173.0 579.6 C166.7 584.7 158.4 594.8 154.0 598.6 C149.6 602.4 148.0 605.6 146.4 602.4 C144.8 599.2 143.2 587.8 144.5 579.6 C145.8 571.4 153.7 560.0 154.0 553.0 C154.3 546.0 149.6 541.0 146.4 537.8 C143.2 534.6 133.7 537.2 135.0 534.0 C136.3 530.8 146.4 522.6 154.0 518.8 C161.6 515.0 174.3 515.6 180.6 511.2 C186.9 506.8 186.9 497.9 192.0 492.2 C197.1 486.5 203.4 481.4 211.0 477.0 C218.6 472.6 231.3 471.9 237.6 465.6 C243.9 459.3 247.7 453.6 249.0 439.0 C250.3 424.4 246.5 393.4 245.2 378.2 C243.9 363.0 245.2 357.3 241.4 347.8 C237.6 338.3 226.8 328.8 222.4 321.2 C218.0 313.6 220.5 313.0 214.8 302.2 C209.1 291.4 197.1 267.4 188.2 256.6 C179.3 245.8 169.8 245.8 161.6 237.6 C153.4 229.4 146.4 217.3 138.8 207.2 C131.2 197.1 118.5 186.3 116.0 176.8 C113.5 167.3 126.1 157.2 123.6 150.2 C121.1 143.2 108.4 138.8 100.8 135.0 C93.2 131.2 86.2 132.5 78.0 127.4 C69.8 122.3 57.1 112.8 51.4 104.6 C45.7 96.4 42.5 84.7 43.8 78.0Z" fill="#7BC96F" stroke="#3E8E3E" stroke-width="3.5" stroke-linejoin="round"/>
+        <polygon points="85,112 100,86 115,112" fill="#8C6A4A" stroke="#5E4530" stroke-width="2" stroke-linejoin="round"/>
+        <polygon points="108,114 126,92 144,114" fill="#A07B57" stroke="#5E4530" stroke-width="2" stroke-linejoin="round"/>
+        <polygon points="95,92 100,86 105,92" fill="#FFFFFF"/><polygon points="121,98 126,92 131,98" fill="#FFFFFF"/>
+        <polygon points="240,415 256,388 272,415" fill="#8C6A4A" stroke="#5E4530" stroke-width="2" stroke-linejoin="round"/>
+        <polygon points="262,420 280,396 298,420" fill="#A07B57" stroke="#5E4530" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M205 508 q15 -20 30 0" fill="#4FA04A" stroke="#2F7A2F" stroke-width="2"/>
+        <path d="M228 520 q15 -20 30 0" fill="#58AE52" stroke="#2F7A2F" stroke-width="2"/>
+        <path d="M160 556 q6 -6 12 0 t12 0 t12 0" fill="none" stroke="#4FA04A" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M165 570 q6 -6 12 0 t12 0" fill="none" stroke="#4FA04A" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="146" y1="196" x2="146" y2="158" stroke="#5E4530" stroke-width="3" stroke-linecap="round"/>
+        <g class="flag"><rect x="146" y="158" width="38" height="25" rx="2" fill="#DA251D" stroke="#A81812" stroke-width="1.5"/><g transform="translate(165,171)"><polygon points="0,-7 1.59,-2.18 6.66,-2.16 2.57,0.84 4.11,5.66 0,2.7 -4.11,5.66 -2.57,0.84 -6.66,-2.16 -1.59,-2.18" fill="#FFCD00"/></g></g>
+      </g>
+      <g class="isl">
+        <g stroke="#B8963E" stroke-width="1.5" fill="#F2D98B"><ellipse cx="405" cy="300" rx="5" ry="3.5"/><ellipse cx="414" cy="296" rx="4" ry="3"/><ellipse cx="422" cy="303" rx="5" ry="3.5"/><ellipse cx="430" cy="298" rx="4" ry="3"/><ellipse cx="437" cy="305" rx="5" ry="3.5"/><ellipse cx="412" cy="309" rx="4" ry="3"/><ellipse cx="426" cy="311" rx="4" ry="3"/><ellipse cx="433" cy="291" rx="4" ry="3"/></g>
+        <line x1="422" y1="303" x2="422" y2="280" stroke="#5E4530" stroke-width="2" stroke-linecap="round"/>
+        <g class="flag"><rect x="422" y="280" width="16" height="11" fill="#DA251D"/><polygon points="430,282 431,285 434,285 431.7,286.8 432.6,290 430,288 427.4,290 428.3,286.8 426,285 429,285" fill="#FFCD00"/></g>
+        <text x="420" y="340" text-anchor="middle" style="font-size:14px;font-weight:500;fill:#1F5F8F">Quần đảo Hoàng Sa</text>
+      </g>
+      <g class="isl">
+        <g stroke="#B8963E" stroke-width="1.5" fill="#F2D98B"><ellipse cx="415" cy="522" rx="5" ry="3.5"/><ellipse cx="432" cy="537" rx="4" ry="3"/><ellipse cx="448" cy="528" rx="5" ry="3.5"/><ellipse cx="462" cy="548" rx="4" ry="3"/><ellipse cx="440" cy="562" rx="5" ry="3.5"/><ellipse cx="478" cy="562" rx="4" ry="3"/><ellipse cx="495" cy="576" rx="5" ry="3.5"/><ellipse cx="470" cy="584" rx="4" ry="3"/><ellipse cx="452" cy="592" rx="5" ry="3.5"/><ellipse cx="510" cy="592" rx="4" ry="3"/><ellipse cx="486" cy="606" rx="5" ry="3.5"/><ellipse cx="506" cy="620" rx="4" ry="3"/><ellipse cx="468" cy="622" rx="5" ry="3.5"/><ellipse cx="526" cy="604" rx="4" ry="3"/></g>
+        <line x1="495" y1="576" x2="495" y2="553" stroke="#5E4530" stroke-width="2" stroke-linecap="round"/>
+        <g class="flag"><rect x="495" y="553" width="16" height="11" fill="#DA251D"/><polygon points="503,555 504,558 507,558 504.7,559.8 505.6,563 503,561 500.4,563 501.3,559.8 499,558 502,558" fill="#FFCD00"/></g>
+        <text x="470" y="668" text-anchor="middle" style="font-size:14px;font-weight:500;fill:#1F5F8F">Quần đảo Trường Sa</text>
+      </g>
+      <path class="route" d="M192 158 C 178 190, 170 220, 198 252 S 250 320, 270 360 S 286 440, 262 488" fill="none" stroke="#E8593C" stroke-width="3.5" stroke-dasharray="2 9" stroke-linecap="round"/>
+      <g transform="translate(266,350) scale(1.5)"><g class="heart"><path d="M0 6 C -12 -4 -10 -14 0 -8 C 10 -14 12 -4 0 6Z" fill="#E8593C" stroke="#B83A22" stroke-width="1.5" stroke-linejoin="round"/></g></g>
+      <g transform="translate(192,152)"><g class="pin"><path d="M0 0 C -14 -22 -16 -34 -16 -40 a16 16 0 1 1 32 0 C 16 -34 14 -22 0 0 Z" fill="#F0568A" stroke="#A82C58" stroke-width="2.5" stroke-linejoin="round"/><circle cx="0" cy="-40" r="6" fill="#FFFFFF"/></g></g>
+      <g transform="translate(260,492)"><g class="pin"><path d="M0 0 C -14 -22 -16 -34 -16 -40 a16 16 0 1 1 32 0 C 16 -34 14 -22 0 0 Z" fill="#3E8EDE" stroke="#1F5C9E" stroke-width="2.5" stroke-linejoin="round"/><circle cx="0" cy="-40" r="6" fill="#FFFFFF"/></g></g>
+      <g class="lbl"><line x1="210" y1="118" x2="300" y2="140" stroke="#A82C58" stroke-width="2" stroke-dasharray="3 4" stroke-linecap="round"/>
+        <rect x="300" y="116" width="190" height="52" rx="12" fill="#FFFFFF" stroke="#A82C58" stroke-width="2"/><text x="395" y="135" text-anchor="middle" dominant-baseline="central" style="font-size:15px;font-weight:500;fill:#7A1F45">Nhà gái</text><text x="395" y="154" text-anchor="middle" dominant-baseline="central" style="font-size:12px;fill:#A82C58">Nam Định</text></g>
+      <g class="lbl"><line x1="276" y1="452" x2="345" y2="466" stroke="#1F5C9E" stroke-width="2" stroke-dasharray="3 4" stroke-linecap="round"/>
+        <rect x="345" y="440" width="190" height="52" rx="12" fill="#FFFFFF" stroke="#1F5C9E" stroke-width="2"/><text x="440" y="459" text-anchor="middle" dominant-baseline="central" style="font-size:15px;font-weight:500;fill:#173F6E">Nhà trai</text><text x="440" y="478" text-anchor="middle" dominant-baseline="central" style="font-size:12px;fill:#1F5C9E">Bảo Lộc, Lâm Đồng</text></g>
+    </svg>
+  </section>
+
+  <section id="events" class="reveal">
+    <h3>Thông tin lễ cưới</h3>
+    <div class="events">
+      <div class="event bride st">
+        <div class="tag">Nhà gái</div>
+        <h4>Nam Định</h4>
+        <p class="place">Đồng bằng sông Hồng</p>
+        <div class="date">17.03.2027</div>
+        <div class="lunar">Thứ Tư · 10 tháng 2 Âm lịch</div>
+        <!-- ĐIỀN GIỜ & ĐỊA ĐIỂM NHÀ GÁI -->
+        <p><strong>Giờ:</strong> … giờ …</p>
+        <p><strong>Địa điểm:</strong> …</p>
+      </div>
+      <div class="event groom st">
+        <div class="tag">Nhà trai</div>
+        <h4>Bảo Lộc</h4>
+        <p class="place">Lâm Đồng</p>
+        <div class="date">26.03.2027</div>
+        <div class="lunar">Thứ Sáu · 19 tháng 2 Âm lịch</div>
+        <!-- ĐIỀN GIỜ & ĐỊA ĐIỂM NHÀ TRAI -->
+        <p><strong>Giờ:</strong> … giờ …</p>
+        <p><strong>Địa điểm:</strong> …</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="album" class="reveal">
+    <h3>Album ảnh cưới</h3>
+    <!-- Đặt ảnh tên album1.jpg, album2.jpg, ... (tối đa album8) cùng thư mục, trang sẽ tự hiện -->
+    <div class="album" id="album-grid">
+      <img class="st" src="https://placehold.co/600x700?text=Anh+cuoi+1" alt="Ảnh cưới 1">
+      <img class="st" src="https://placehold.co/600x700?text=Anh+cuoi+2" alt="Ảnh cưới 2">
+      <img class="st" src="https://placehold.co/600x700?text=Anh+cuoi+3" alt="Ảnh cưới 3">
+    </div>
+  </section>
+
+  <section id="video" class="reveal" data-fx="zoom">
+    <h3>Video Kỷ Niệm</h3>
+    <div class="tiktok-container">
+      <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@genznghenhacj/video/7603001187889171720" data-video-id="7603001187889171720" style="max-width:325px; min-width:325px;">
+        <section>
+          <a target="_blank" title="@genznghenhacj" href="https://www.tiktok.com/@genznghenhacj?refer=embed">@genznghenhacj</a>
+          <p>Tơ duyên remix 🎶🎵</p>
+        </section>
+      </blockquote>
+      <script async src="https://www.tiktok.com/embed.js"></script>
+    </div>
+  </section>
+
+
+
+  <section id="location" class="reveal" data-fx="left">
+    <h3>Địa điểm tổ chức</h3>
+    <div class="maps">
+      <div class="st">
+        <p class="map-cap">Nhà gái · Nam Định</p>
+        <!-- Thay "Nam Dinh" bằng địa chỉ thật của tiệc nhà gái -->
+        <iframe class="map" src="https://www.google.com/maps?q=Nam+Dinh&output=embed" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+      <div class="st">
+        <p class="map-cap">Nhà trai · Bảo Lộc</p>
+        <!-- Thay "Bao Loc Lam Dong" bằng địa chỉ thật của tiệc nhà trai -->
+        <iframe class="map" src="https://www.google.com/maps?q=Bao+Loc+Lam+Dong&output=embed" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2027 Wedding Invitation. Thiết kế bởi QUÁCH KỲ.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var audio = document.getElementById('background-music');
+      var musicBtn = document.getElementById('music-control');
+
+      // ===== CẤU HÌNH =====
+      var heroImages = ['1234', 'anh2', 'anh3', 'anh4']; // tên ảnh nền, không cần đuôi file
+      var heroInterval = 5000;                            // 5 giây đổi ảnh
+      var countdownTarget = '2027-03-17T00:00:00+07:00';  // ngày cưới nhà gái (đổi giờ nếu muốn, ví dụ T10:00:00)
+
+      var exts = ['jpg', 'jpeg', 'png', 'webp', 'JPG', 'JPEG', 'PNG'];
+
+      function tryLoad(src) {
+        return new Promise(function(resolve) {
+          var img = new Image();
+          img.onload = function() { resolve(src); };
+          img.onerror = function() { resolve(null); };
+          img.src = src;
+        });
+      }
+      function resolveImages(names) {
+        return Promise.all(names.map(function(name) {
+          if (/\.[a-zA-Z0-9]+$/.test(name)) return tryLoad(name);
+          return Promise.all(exts.map(function(e) { return tryLoad(name + '.' + e); })).then(function(r) {
+            return r.filter(Boolean)[0] || null;
+          });
+        })).then(function(list) { return list.filter(Boolean); });
+      }
+
+      // ===== Slideshow ảnh nền =====
+      var slidesBox = document.getElementById('hero-slides');
+      resolveImages(heroImages).then(function(found) {
+        var slides = found.map(function(src, i) {
+          var d = document.createElement('div');
+          d.className = 'hero-slide' + (i === 0 ? ' active' : '');
+          d.style.backgroundImage = "url('" + src + "')";
+          slidesBox.appendChild(d);
+          return d;
+        });
+        if (slides.length > 1) {
+          var current = 0;
+          setInterval(function() {
+            slides[current].classList.remove('active');
+            current = (current + 1) % slides.length;
+            slides[current].classList.add('active');
+          }, heroInterval);
+        }
+      });
+
+      // ===== Album tự nhận ảnh album1..album8 =====
+      var albumNames = [];
+      for (var a = 1; a <= 8; a++) albumNames.push('album' + a);
+      resolveImages(albumNames).then(function(found) {
+        if (!found.length) return;
+        var grid = document.getElementById('album-grid');
+        grid.innerHTML = '';
+        found.forEach(function(src) {
+          var im = document.createElement('img');
+          im.className = 'st'; im.src = src; im.alt = 'Ảnh cưới'; im.loading = 'lazy';
+          grid.appendChild(im);
+        });
+      });
+
+      // ===== Đồng hồ đếm ngược =====
+      var target = new Date(countdownTarget).getTime();
+      function pad(n) { return n < 10 ? '0' + n : '' + n; }
+      function tick() {
+        var diff = target - Date.now();
+        if (diff <= 0) {
+          document.getElementById('countdown-box').innerHTML = '<div class="cd-note" style="margin:0">Hôm nay là ngày vui của chúng mình!</div>';
+          return;
+        }
+        document.getElementById('cd-d').textContent = Math.floor(diff / 86400000);
+        document.getElementById('cd-h').textContent = pad(Math.floor(diff % 86400000 / 3600000));
+        document.getElementById('cd-m').textContent = pad(Math.floor(diff % 3600000 / 60000));
+        document.getElementById('cd-s').textContent = pad(Math.floor(diff % 60000 / 1000));
+      }
+      tick();
+      setInterval(tick, 1000);
+
+      // ===== Hiện dần khi cuộn trang + chạy hiệu ứng bản đồ =====
+      var revealEls = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) {
+            if (e.isIntersecting) {
+              e.target.classList.add('show');
+              if (e.target.classList.contains('journey')) e.target.classList.add('play');
+              io.unobserve(e.target);
+            }
+          });
+        }, {threshold: 0.2});
+        revealEls.forEach(function(el) { io.observe(el); });
+      } else {
+        revealEls.forEach(function(el) { el.classList.add('show'); });
+        document.getElementById('journey').classList.add('play');
+      }
+
+      // ===== Thanh tiến trình + hiệu ứng trượt phần đầu trang =====
+      var bar = document.getElementById('progress');
+      var heroContent = document.querySelector('.hero-content');
+      var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var ticking = false;
+      function onScroll() {
+        var y = window.pageYOffset || document.documentElement.scrollTop;
+        var max = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.width = (max > 0 ? y / max * 100 : 0) + '%';
+        if (!reduce && y < window.innerHeight) {
+          heroContent.style.transform = 'translateY(' + (y * 0.35) + 'px)';
+          heroContent.style.opacity = Math.max(0, 1 - y / (window.innerHeight * 0.75));
+        }
+        ticking = false;
+      }
+      window.addEventListener('scroll', function() {
+        if (!ticking) { requestAnimationFrame(onScroll); ticking = true; }
+      }, {passive: true});
+      onScroll();
+
+      // ===== Nhạc nền =====
+      var autoPlayPromise = audio.play();
+      if (autoPlayPromise !== undefined) {
+        autoPlayPromise.then(function() {
+          musicBtn.classList.add('playing');
+        }).catch(function() {
+          console.log("Autoplay bị chặn.");
+        });
+      }
+
+      musicBtn.addEventListener('click', function() {
+        if (audio.paused) {
+          audio.play();
+          musicBtn.classList.add('playing');
+          musicBtn.textContent = '🎵';
+        } else {
+          audio.pause();
+          musicBtn.classList.remove('playing');
+          musicBtn.textContent = '🔇';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
